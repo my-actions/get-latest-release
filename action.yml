@@ -2,7 +2,7 @@ name: "Get latest release of repository"
 
 description: "Get latest release including draft and prerelease. Return information about release"
 inputs:
-  myToken:
+  token:
     description: "GitHub Token"
     required: true
   exclude_types:
