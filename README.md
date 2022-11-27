@@ -5,7 +5,7 @@ Get latest release including draft and prerelease. Return information about rele
 
 ## Inputs
 
-### `myToken`
+### `token`
 
 **Required** Token to github repository to get access to hidden releases (draft releases)
 
@@ -51,7 +51,7 @@ steps:
     id: last_release
     uses: InsonusK/get-latest-release@v1.0.1
     with:
-      myToken: ${{ github.token }}
+      token: ${{ github.token }}
       exclude_types: "release"
       view_top: 1
   - name: "Print result"

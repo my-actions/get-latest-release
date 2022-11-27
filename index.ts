@@ -3,7 +3,7 @@ import * as github from '@actions/github'
 
 async function run(): Promise<void> {
     // Get input values
-    const myToken = core.getInput('myToken');
+    const token = core.getInput('token');
     const excludeReleaseTypes = core.getInput('exclude_types').split('|');
     const topList = +core.getInput('view_top');
 
@@ -12,24 +12,18 @@ async function run(): Promise<void> {
     const excludePrerelease = excludeReleaseTypes.some(f => f === "prerelease");
     const excludeRelease = excludeReleaseTypes.some(f => f === "release");
 
-    const octokit = github.getOctokit(myToken);
+    const octokit = github.getOctokit(token);
 
     // Load release list from GitHub
-    let releaseList = await octokit.repos.listReleases({
+    let releaseList = await octokit.rest.repos.listReleases({
         repo: github.context.repo.repo,
         owner: github.context.repo.owner,
         per_page: topList,
         page: 1
     });
 
-    // Search release list for latest required release
-    if (core.isDebug()) {
-        core.debug(`Found ${releaseList.data.length} releases`);
-        releaseList.data.forEach((el) => WriteDebug(el));
-    }
-
-    for (let i = 0; i < releaseList.data.length; i++) {
-        let releaseListElement = releaseList.data[i];
+    for (const element of releaseList.data) {
+        let releaseListElement = element;
 
         if ((!excludeDraft && releaseListElement.draft) ||
             (!excludePrerelease && releaseListElement.prerelease) ||
